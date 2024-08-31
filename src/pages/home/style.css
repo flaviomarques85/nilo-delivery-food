@@ -19,16 +19,12 @@
   padding: 0;
 }
 
-.product img {
-  width: 100px;
+.container img {
+ width: 100px;
+ height: 72px;
 }
 
-.product-img {
-  width: 6em;
-  height: 6em;
-  will-change: filter;
-  transition: filter 300ms;
-}
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
