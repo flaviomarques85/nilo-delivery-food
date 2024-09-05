@@ -1,15 +1,26 @@
 import { useState, useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Burger from '../../assets/burger.jpg'
 import Refri from '../../assets/refri.jpg'
 import Coxinha from '../../assets/coxinha.jpg'
-import { CartContext } from '../cart/cartContext'
 import './style.css'
 
 function Home() {
   const [productQuantities, setProductQuantities] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Recupera o estado do carrinho, se existir
+    if (location.state && location.state.cartItems) {
+      const newProductQuantities = {};
+      location.state.cartItems.forEach(item => {
+        newProductQuantities[item.title] = item.quantity;
+      });
+      setProductQuantities(newProductQuantities);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (errorMessage) {
@@ -21,7 +32,6 @@ function Home() {
     }
   }, [errorMessage]);
 
-  const { } = CartContext
   const Products = [
     {
       Image: Burger,

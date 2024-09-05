@@ -1,16 +1,24 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Cart() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { cartItems } = location.state || { cartItems: [] };
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.quantity * item.price, 0);
     };
 
+    const handleGoBack = () => {
+        navigate('/', { state: { cartItems } });
+    };
+
     return (
         <div className="container">
+            <button onClick={handleGoBack} className="btn btn-secondary mb-3">
+                ← Voltar
+            </button>
             <h2>Seu Carrinho</h2>
             {cartItems.length === 0 ? (
                 <p>Seu carrinho está vazio.</p>
