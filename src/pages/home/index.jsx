@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Burger from '../../assets/burger.jpg'
 import Refri from '../../assets/refri.jpg'
 import Coxinha from '../../assets/coxinha.jpg'
-import './style.css'
 
 function Home() {
   const [productQuantities, setProductQuantities] = useState({});
@@ -26,7 +25,7 @@ function Home() {
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage('');
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
@@ -92,40 +91,59 @@ function Home() {
   };
 
   return (
-    <div className='container'>
-      <h2>Nossos Produtos</h2>
-      <button
-        className='btn btn-primary me-md-2'
-        onClick={clearCart}
-      >
-        Esvaziar Sacola
-      </button>
-      <button
-        className='btn btn-success'
-        onClick={goToCart}
-      >
-        Ver Carrinho
-      </button>
-      {errorMessage && <div className="alert alert-warning">{errorMessage}</div>}
-      {Products.map((product => (
-        <div key={product.Title} className="row">
-          <img className='col-2' src={product.Image} alt="item-food" />
-          <div className='product-text col'>
-            <ul className="list-unstyled">
-              <li>{product.Title}</li>
-              <li>{product.Description}</li>
-              <li>Preço: {product.Price} tickets</li>
-            </ul>
-
-          </div>
-          <div className='product-add col-2'>
-            <button onClick={() => decrementQuantity(product.Title)}>-</button>
-            <span>{productQuantities[product.Title] || 0}</span>
-            <button onClick={() => incrementQuantity(product.Title)}>+</button>
+    <div className='container mx-auto px-4 py-6 max-w-lg relative'>
+      <h2 className='text-2xl sm:text-3xl font-bold mb-6 text-gray-800 text-center'>Nossos Produtos</h2>
+      <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-6'>
+        <button
+          className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto'
+          onClick={clearCart}
+        >
+          Esvaziar Sacola
+        </button>
+        <button
+          className='bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto'
+          onClick={goToCart}
+        >
+          Ver Carrinho
+        </button>
+      </div>
+      {errorMessage && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong className="font-bold">Atenção!</strong>
+            <span className="block sm:inline"> {errorMessage}</span>
           </div>
         </div>
-      )))}
-      <p></p>
+      )}
+      <div className='space-y-6'>
+        {Products.map((product => (
+          <div key={product.Title} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <img className='w-full h-48 object-cover' src={product.Image} alt={product.Title} />
+            <div className='p-4'>
+              <h3 className='font-bold text-xl mb-2 text-gray-800'>{product.Title}</h3>
+              <p className='text-gray-600 mb-4 text-sm'>{product.Description}</p>
+              <p className='text-gray-800 font-semibold mb-4'>Preço: {product.Price} tickets</p>
+              <div className='flex items-center justify-between'>
+                <button
+                  className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l transition duration-300'
+                  onClick={() => decrementQuantity(product.Title)}
+                >
+                  -
+                </button>
+                <span className='px-4 py-2 bg-gray-200 font-bold'>
+                  {productQuantities[product.Title] || 0}
+                </span>
+                <button
+                  className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r transition duration-300'
+                  onClick={() => incrementQuantity(product.Title)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        )))}
+      </div>
     </div>
   )
 }

@@ -16,7 +16,7 @@ Nilo Delivery Food é uma plataforma inovadora de entrega de comida que funciona
 
 ## Tecnologias Utilizadas
 
-- React.js
+- React
 - React Router
 - CSS3
 - HTML5
