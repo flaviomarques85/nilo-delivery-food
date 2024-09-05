@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Burger from '../../assets/burger.jpg'
 import Refri from '../../assets/refri.jpg'
 import Coxinha from '../../assets/coxinha.jpg'
@@ -8,6 +9,7 @@ import './style.css'
 function Home() {
   const [productQuantities, setProductQuantities] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (errorMessage) {
@@ -68,6 +70,17 @@ function Home() {
     setErrorMessage('');
   };
 
+  const goToCart = () => {
+    const cartItems = Products.filter(product => productQuantities[product.Title] > 0)
+      .map(product => ({
+        title: product.Title,
+        quantity: productQuantities[product.Title],
+        price: product.Price
+      }));
+
+    navigate('/cart', { state: { cartItems } });
+  };
+
   return (
     <div className='container'>
       <h2>Nossos Produtos</h2>
@@ -76,6 +89,12 @@ function Home() {
         onClick={clearCart}
       >
         Esvaziar Sacola
+      </button>
+      <button
+        className='btn btn-success'
+        onClick={goToCart}
+      >
+        Ver Carrinho
       </button>
       {errorMessage && <div className="alert alert-warning">{errorMessage}</div>}
       {Products.map((product => (
