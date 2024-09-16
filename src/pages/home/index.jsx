@@ -33,12 +33,6 @@ function Home() {
 
   const Products = [
     {
-      Image: Burger,
-      Title: 'Hamburguer',
-      Description: 'Delicioso hamburguer preparado com carne fresca especialmente para a esta feira.',
-      Price: 1
-    },
-    {
       Image: Refri,
       Title: 'Refrigerante',
       Description: 'Refrescante refri estupdamente gelado.',
