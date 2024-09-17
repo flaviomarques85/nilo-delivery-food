@@ -73,7 +73,7 @@ function Cart() {
 
         for (let i = 0; i < tickets.length; i++) {
             try {
-                const response = await axios.get(`http://localhost:3001/api/ticket/${tickets[i]}`);
+                const response = await axios.get(`https://delivery-food-backend-7db5bb48766a.herokuapp.com/${tickets[i]}`);
                 if (response.status === 200) {
                     newTicketStatus[i] = 'valid';
                 } else {
@@ -112,7 +112,7 @@ function Cart() {
                 items: orderItems
             };
 
-            const response = await axios.post('http://localhost:3001/api/orders', orderData);
+            const response = await axios.post('https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/orders', orderData);
             if (response.status === 201) { // Alterado para 201
                 setOrderNumber(newOrderNumber);
                 setSuccessMessage(`Pedido ${newOrderNumber} realizado com sucesso. Aguarde a entrega.`);
