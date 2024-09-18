@@ -127,17 +127,21 @@ function Home() {
         </div>
       )}
       <div className='space-y-6'>
-        {Products.map((product => (
+        {Products.map(product => (
           <div key={product.Title} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img className='w-full h-48 object-cover items-food' src={product.Image} alt={product.Title} />
+            <img className={`w-full h-48 object-cover items-food ${!product.stock ? 'grayscale' : ''}`} src={product.Image} alt={product.Title} />
             <div className='p-4'>
-              <h3 className='font-bold text-xl mb-2 text-gray-800'>{product.Title}</h3>
+              <h3 className='font-bold text-xl mb-2 text-gray-800'>
+                {product.Title}
+                {!product.stock && <span className="text-pink-600 text-sm ml-2">Sem Estoque</span>}
+              </h3>
               <p className='text-gray-600 mb-4 text-sm'>{product.Description}</p>
               <p className='text-gray-800 font-semibold mb-4'>Preço: {product.Price} tickets</p>
               <div className='flex items-center justify-between'>
                 <button
-                  className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l transition duration-300'
+                  className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l transition duration-300 ${!product.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={() => decrementQuantity(product.Title)}
+                  disabled={!product.stock}
                 >
                   -
                 </button>
@@ -145,15 +149,16 @@ function Home() {
                   {productQuantities[product.Title] || 0}
                 </span>
                 <button
-                  className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r transition duration-300'
+                  className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r transition duration-300 ${!product.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={() => incrementQuantity(product.Title)}
+                  disabled={!product.stock}
                 >
                   +
                 </button>
               </div>
             </div>
           </div>
-        )))}
+        ))}
       </div>
       <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-6 py-6'>
         <button
