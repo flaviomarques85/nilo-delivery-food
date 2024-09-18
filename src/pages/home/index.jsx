@@ -1,8 +1,9 @@
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
-import Burger from '../../assets/burger.jpg'
-import Refri from '../../assets/refri.jpg'
+import Chup from '../../assets/chup.jpg'
 import Coxinha from '../../assets/coxinha.jpg'
+import Refri from '../../assets/refri.jpg'
+import Burger from '../../assets/burger.jpg'
 
 function Home() {
   const [productQuantities, setProductQuantities] = useState({});
@@ -33,16 +34,32 @@ function Home() {
 
   const Products = [
     {
-      Image: Refri,
-      Title: 'Refrigerante',
-      Description: 'Refrescante refri estupdamente gelado.',
-      Price: 1
+      Image: Chup,
+      Title: 'Chup-Chup/Geladinho',
+      Description: 'Refrescante Geladinho.',
+      Price: 1,
+      stock: true
     },
     {
       Image: Coxinha,
       Title: 'Coxinha',
-      Description: 'Suculenta coxinha cocrante, frita na hora.',
-      Price: 1
+      Description: 'Suculenta coxinha crocante, frita na hora.',
+      Price: 1,
+      stock: true
+    },
+    {
+      Image: Burger,
+      Title: 'Hamburguer',
+      Description: 'Delicioso hamburguer artesanal.',
+      Price: 1,
+      stock: false
+    },
+    {
+      Image: Refri,
+      Title: 'Refrigerante',
+      Description: 'Refrescante Refri estupdamente gelado.',
+      Price: 1,
+      stock: false
     },
 
   ]
@@ -89,13 +106,13 @@ function Home() {
       <h2 className='text-2xl sm:text-3xl font-bold mb-6 text-gray-800 text-center'>Nossos Produtos</h2>
       <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-6'>
         <button
-          className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto'
+          className='bg-gradient-to-r from-red-700 to-orange-500 hover:from-red-900 hover:to-orange-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto shadow-md'
           onClick={clearCart}
         >
           Esvaziar Sacola
         </button>
         <button
-          className='bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto'
+          className='bg-gradient-to-r from-blue-800 to-green-600 hover:from-blue-700 hover:to-green-900 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto shadow-md'
           onClick={goToCart}
         >
           Ver Carrinho
@@ -112,7 +129,7 @@ function Home() {
       <div className='space-y-6'>
         {Products.map((product => (
           <div key={product.Title} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img className='w-full h-48 object-cover' src={product.Image} alt={product.Title} />
+            <img className='w-full h-48 object-cover items-food' src={product.Image} alt={product.Title} />
             <div className='p-4'>
               <h3 className='font-bold text-xl mb-2 text-gray-800'>{product.Title}</h3>
               <p className='text-gray-600 mb-4 text-sm'>{product.Description}</p>
@@ -137,6 +154,20 @@ function Home() {
             </div>
           </div>
         )))}
+      </div>
+      <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-6 py-6'>
+        <button
+          className='bg-gradient-to-r from-red-700 to-orange-500 hover:from-red-900 hover:to-orange-600 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto shadow-md'
+          onClick={clearCart}
+        >
+          Esvaziar Sacola
+        </button>
+        <button
+          className='bg-gradient-to-r from-blue-800 to-green-600 hover:from-blue-700 hover:to-green-900 text-white font-bold py-3 px-4 rounded transition duration-300 w-full sm:w-auto shadow-md'
+          onClick={goToCart}
+        >
+          Ver Carrinho
+        </button>
       </div>
     </div>
   )
