@@ -48,7 +48,7 @@ function Cart() {
 
     const handleTicketChange = (index, value) => {
         const newTickets = [...tickets];
-        newTickets[index] = value;
+        newTickets[index] = value.toUpperCase();
         setTickets(newTickets);
 
         const newTicketStatus = [...ticketStatus];
