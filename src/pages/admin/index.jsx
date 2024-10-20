@@ -11,7 +11,7 @@ function AdminOrders() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://ec2-35-168-106-126.compute-1.amazonaws.com:3001/api/orders');
+                const response = await axios.get('https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/orders');
                 setOrders(response.data);
             } catch (err) {
                 setError('Erro ao carregar os pedidos.');
