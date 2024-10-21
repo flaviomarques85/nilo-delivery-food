@@ -32,9 +32,66 @@ function AdminOrders() {
         }
     };
 
-    const handleOptionClick = (option) => {
-        console.log(`Opção selecionada: ${option}`);
-        setMenuVisible(false); // Fecha o menu após a seleção
+    const handleOptionClick = async (option, orderId) => {
+        try {
+            let response;
+            switch (option) {
+                case 'Cancelar':
+                case 'Atender':
+                    const status = option === 'Cancelar' ? 'cancelado' : 'atendido';
+                    response = await axios.put(`https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/orders/${orderId}`, {
+                        order_status: status
+                    });
+
+                    // Atualiza o estado local com o novo status
+                    setOrders(orders.map(order =>
+                        order._id === orderId ? { ...order, order_status: status } : order
+                    ));
+                    console.log(`Pedido ${orderId} ${status} com sucesso`);
+                    break;
+
+                case 'Excluir':
+                    response = await axios.delete(`https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/orders/${orderId}`);
+
+                    // Remove o pedido excluído do estado local
+                    setOrders(orders.filter(order => order._id !== orderId));
+                    console.log(`Pedido ${orderId} excluído com sucesso`);
+                    break;
+
+                default:
+                    console.log(`Opção selecionada: ${option}`);
+                    break;
+            }
+        } catch (error) {
+            console.error(`Erro ao ${option.toLowerCase()} o pedido:`, error);
+            setError(`Erro ao ${option.toLowerCase()} o pedido. Por favor, tente novamente.`);
+        } finally {
+            setMenuVisible(false); // Fecha o menu após a seleção
+        }
+    };
+
+    const calculateOrderTotals = () => {
+        const totals = {
+            atendidos: 0,
+            pendentes: 0,
+            cancelados: 0
+        };
+
+        orders.forEach(order => {
+            switch (order.order_status) {
+                case 'atendido':
+                    totals.atendidos++;
+                    break;
+                case 'cancelado':
+                    totals.cancelados++;
+                    break;
+                default:
+                    totals.pendentes++;
+                    break;
+            }
+        });
+
+        return totals;
     };
 
     if (loading) {
@@ -45,9 +102,24 @@ function AdminOrders() {
         return <div>{error}</div>;
     }
 
+    const orderTotals = calculateOrderTotals();
+
     return (
         <div className="container mx-auto px-4 py-6">
-            <h2 className="text-2xl font-bold mb-4">Gestão de Pedidos</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Gestão de Pedidos</h2>
+                <div className="flex space-x-4">
+                    <span className="text-green-500 font-semibold">
+                        Atendidos: {orderTotals.atendidos}
+                    </span>
+                    <span className="text-blue-500 font-semibold">
+                        Pendentes: {orderTotals.pendentes}
+                    </span>
+                    <span className="text-red-500 font-semibold">
+                        Cancelados: {orderTotals.cancelados}
+                    </span>
+                </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {orders.map(order => (
                     <div key={order._id} className="bg-white rounded-lg shadow-md p-4 relative">
@@ -62,25 +134,25 @@ function AdminOrders() {
                             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10">
                                 <ul className="py-2">
                                     <li
-                                        onClick={() => handleOptionClick('Excluir')}
+                                        onClick={() => handleOptionClick('Excluir', order._id)}
                                         className="text-red-500 hover:bg-red-100 cursor-pointer px-4 py-2"
                                     >
                                         Excluir
                                     </li>
                                     <li
-                                        onClick={() => handleOptionClick('Cancelar')}
+                                        onClick={() => handleOptionClick('Cancelar', order._id)}
                                         className="text-yellow-500 hover:bg-yellow-100 cursor-pointer px-4 py-2"
                                     >
                                         Cancelar
                                     </li>
                                     <li
-                                        onClick={() => handleOptionClick('Atender')}
+                                        onClick={() => handleOptionClick('Atender', order._id)}
                                         className="text-green-500 hover:bg-green-100 cursor-pointer px-4 py-2"
                                     >
                                         Atender
                                     </li>
                                     <li
-                                        onClick={() => handleOptionClick('Detalhes')}
+                                        onClick={() => handleOptionClick('Detalhes', order._id)}
                                         className="text-blue-500 hover:bg-blue-100 cursor-pointer px-4 py-2"
                                     >
                                         Detalhes
