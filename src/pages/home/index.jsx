@@ -59,7 +59,7 @@ function Home() {
       Title: 'Refrigerante',
       Description: 'Refrescante Refri estupdamente gelado.',
       Price: 1,
-      stock: false
+      stock: true
     },
 
   ]
