@@ -74,8 +74,16 @@ function Cart() {
         for (let i = 0; i < tickets.length; i++) {
             try {
                 const response = await axios.get(`https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/ticket/${tickets[i]}`);
+
                 if (response.status === 200) {
-                    newTicketStatus[i] = 'valid';
+                    // Verifica se o ticket existe E não foi usado
+                    if (response.data.used === "false") {
+                        newTicketStatus[i] = 'valid';
+                    } else {
+                        newTicketStatus[i] = 'invalid';
+                        allValid = false;
+                        setError('Um ou mais tickets já foram utilizados em outras compras.');
+                    }
                 } else {
                     newTicketStatus[i] = 'invalid';
                     allValid = false;
@@ -83,6 +91,10 @@ function Cart() {
             } catch (error) {
                 newTicketStatus[i] = 'invalid';
                 allValid = false;
+                // Verifica se é um erro específico de ticket já usado
+                if (error.response?.data?.message === 'Ticket already used') {
+                    setError('Um ou mais tickets já foram utilizados em outras compras.');
+                }
             }
         }
 
@@ -92,7 +104,7 @@ function Cart() {
 
         if (allValid) {
             setSuccessMessage('Todos os tickets são válidos! Você pode finalizar o pedido agora.');
-        } else {
+        } else if (!error) { // Só define esta mensagem se não houver uma mensagem de erro específica
             setError('Um ou mais tickets são inválidos. Por favor, verifique e tente novamente.');
         }
     };
@@ -113,7 +125,7 @@ function Cart() {
             };
 
             const response = await axios.post(`https://delivery-food-backend-7db5bb48766a.herokuapp.com/api/orders`, orderData);
-            if (response.status === 201) { // Alterado para 201
+            if (response.status === 201) {
                 setOrderNumber(newOrderNumber);
                 setSuccessMessage(`Pedido ${newOrderNumber} realizado com sucesso. Aguarde a entrega.`);
                 setAllTicketsValid(false); // Desabilita o botão "Finalizar Pedido"
