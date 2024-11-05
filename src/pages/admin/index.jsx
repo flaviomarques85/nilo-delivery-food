@@ -122,8 +122,23 @@ function AdminOrders() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {orders.map(order => (
-                    <div key={order._id} className="bg-white rounded-lg shadow-md p-4 relative">
-                        <h3 className="font-bold text-lg">Pedido #{order._id}</h3>
+                    <div
+                        key={order._id}
+                        className={`rounded-lg shadow-md p-4 relative transition-colors duration-200 ${order.order_status === 'atendido'
+                                ? 'bg-green-50 border-2 border-green-200'
+                                : order.order_status === 'cancelado'
+                                    ? 'bg-red-50 border-2 border-red-200'
+                                    : 'bg-blue-50 border-2 border-blue-200'
+                            }`}
+                    >
+                        <h3 className={`font-bold text-lg ${order.order_status === 'atendido'
+                                ? 'text-green-700'
+                                : order.order_status === 'cancelado'
+                                    ? 'text-red-700'
+                                    : 'text-blue-700'
+                            }`}>
+                            Pedido #{order._id}
+                        </h3>
                         <button
                             onClick={() => toggleMenu(order._id)}
                             className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
@@ -160,12 +175,26 @@ function AdminOrders() {
                                 </ul>
                             </div>
                         )}
-                        <p><strong>Order:</strong> {order.order_number}</p>
-                        <p><strong>Status:</strong> {order.order_status}</p>
-                        <p><strong>Data:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
-                        <p><strong>Hora:</strong> {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p className={`${order.order_status === 'atendido'
+                                ? 'text-green-600'
+                                : order.order_status === 'cancelado'
+                                    ? 'text-red-600'
+                                    : 'text-blue-600'
+                            }`}>
+                            <strong>Order:</strong> {order.order_number}
+                        </p>
+                        <p className={`font-medium ${order.order_status === 'atendido'
+                                ? 'text-green-600'
+                                : order.order_status === 'cancelado'
+                                    ? 'text-red-600'
+                                    : 'text-blue-600'
+                            }`}>
+                            <strong>Status:</strong> {order.order_status}
+                        </p>
+                        <p className="text-gray-700"><strong>Data:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+                        <p className="text-gray-700"><strong>Hora:</strong> {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
 
-                        <h4 className="font-semibold mt-4">Itens do Pedido:</h4>
+                        <h4 className="font-semibold mt-4 text-gray-800">Itens do Pedido:</h4>
                         <ul className="list-disc list-inside">
                             {order.items.map(item => (
                                 <li key={item.item_name} className="text-gray-700">
